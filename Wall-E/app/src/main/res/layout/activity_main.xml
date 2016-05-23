@@ -18,6 +18,12 @@
         android:text="Wall-E!" />
 
     <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Conectar"/>
+
+    <Button
         android:id="@+id/btnListen"
         android:layout_width="match_parent"
         android:layout_height="80dp"

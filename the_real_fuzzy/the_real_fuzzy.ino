@@ -7,13 +7,16 @@
 #include <FuzzyIO.h>
 #include <FuzzySet.h>
 #include <FuzzyRuleAntecedent.h>
+#include <SoftwareSerial.h>
  
 // Step 1 -  Instantiating an object library
 Fuzzy* fuzzy = new Fuzzy();
+SoftwareSerial bt(2,3);
+
  
 void setup(){
  Serial.begin(9600);
- 
+ bt.begin(9600);
  // Step 2 - Creating a FuzzyInput distance
  FuzzyInput* indicacion = new FuzzyInput(1);// With its ID in param
  
@@ -28,6 +31,8 @@ void setup(){
  indicacion->addFuzzySet(muyCaliente);
  
  fuzzy->addFuzzyInput(indicacion);
+ 
+ FuzzyOutput* velocity = new FuzzyOutput(1);
  
  FuzzySet* superSlow = new FuzzySet(0, 10, 10, 20); // Super Slow velocity
  velocity->addFuzzySet(superSlow); // Add FuzzySet slow to velocity
@@ -84,16 +89,33 @@ void setup(){
 }
 
 void loop(){
- float indication = getIndicacionFromAndroid(); 
-  
-// Step 5 - Report inputs value, passing its ID and value
-fuzzy->setInput(1, indication); 
- // Step 6 - Exe the fuzzification
- fuzzy->fuzzify(); 
- // Step 7 - Exe the desfuzzyficação for each output, passing its ID
- float output = fuzzy->defuzzify(1);
- 
- setWalleSpeed(output);
+  float output = 0.0;
+ if (bt.available() > 0){
+   int indication = bt.read(); 
+   // Step 5 - Report inputs value, passing its ID and value
+   fuzzy->setInput(1, indication); 
+   // Step 6 - Exe the fuzzification
+   fuzzy->fuzzify(); 
+   // Step 7 - Exe the desfuzzyficação for each output, passing its ID
+    output = fuzzy->defuzzify(1);
+ Serial.println(output);
+ }
+ if(ouput==40){
+   digitalWrite(IN4, 200);
+ }if else(output==30){
+   digitalWrite(IN4,200);
+   digitalWrite(IN3, 200);
+   digitalWrite(IN9, 200);
+   digitalWrite(IN10, 200);
+   
+ }if else(output==20){
+   analogWrite(PWM_Derecho, 50);
+   analogWrite(PWM_Izquierdo, 50);
+ }if else(output==10){
+   analogWrite(PWM_Derecho, 25);
+   analogWrite(PWM_Izquierdo, 25);
+ }
  
  delay(100);
 }
+
