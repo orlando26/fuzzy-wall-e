@@ -78,6 +78,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             ((TextView)findViewById(R.id.text)).setText(thingsYouSaid.get(0));
         }
+        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+        try {
+            startActivityForResult(i,REQ_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show();
+        }
     }
 
 }
